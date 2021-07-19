@@ -29,7 +29,7 @@ class Jailer(commands.Cog):
     @commands.has_role("OP")
     async def jail(self, ctx, member: discord.Member):
         op_role = discord.utils.get(ctx.guild.roles, name="OP")
-        boomer_role = discord.utils.get(ctx.guild.roles, name="Boomer")
+        boomer_role = discord.utils.get(ctx.guild.roles, name="Boomers")
         jailed_role = discord.utils.get(ctx.guild.roles, name="Jailed")
         if op_role in member.roles or boomer_role in member.roles:
             await ctx.send(
@@ -53,10 +53,10 @@ class Jailer(commands.Cog):
     @commands.has_role("OP")
     async def release(self, ctx, member: discord.Member):
         op_role = discord.utils.get(ctx.guild.roles, name="OP")
-        boomer_role = discord.utils.get(ctx.guild.roles, name="Boomer")
+        boomer_role = discord.utils.get(ctx.guild.roles, name="Boomers")
         member_role = discord.utils.get(ctx.guild.roles, name="Member")
         jailed_role = discord.utils.get(ctx.guild.roles, name="Jailed")
-        if op_role in member.roles and boomer_role in member.roles:
+        if op_role in member.roles or boomer_role in member.roles:
             return
         if jailed_role not in member.roles:
             return
