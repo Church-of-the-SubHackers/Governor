@@ -15,18 +15,11 @@ class Jailer(commands.Cog):
         """
         self.bot = bot
 
-    # Events
-    @commands.Cog.listener()
-    async def on_ready(self):
-        """on_ready executes once the bot has connected to Discord"""
-        print(f"{self.bot.user.name} has connected to Discord!")
-
     @commands.command(
         brief="Jails a users",
         description="This Commands Jails the user mentioned"
     )
-    @commands.has_role("Admin")
-    @commands.has_role("OP")
+    @commands.has_any_role("Admin", "OP")
     async def jail(self, ctx, member: discord.Member):
         op_role = discord.utils.get(ctx.guild.roles, name="OP")
         boomer_role = discord.utils.get(ctx.guild.roles, name="Boomers")
@@ -38,8 +31,7 @@ class Jailer(commands.Cog):
             return
         if jailed_role in member.roles:
             return
-        await member.edit(roles=[])
-        await member.add_roles(jailed_role)
+        await member.edit(roles=[jailed_role])
         jail_channel = discord.utils.get(ctx.guild.channels, name="horny-jail")
         await jail_channel.send(
             "{} You have been jailed for rule violation".format(member.mention)
@@ -49,8 +41,7 @@ class Jailer(commands.Cog):
         brief="Removes users from jail",
         description="This Commands removes the user mentioned from jail"
     )
-    @commands.has_role("Admin")
-    @commands.has_role("OP")
+    @commands.has_any_role("Admin", "OP")
     async def release(self, ctx, member: discord.Member):
         op_role = discord.utils.get(ctx.guild.roles, name="OP")
         boomer_role = discord.utils.get(ctx.guild.roles, name="Boomers")
@@ -60,8 +51,7 @@ class Jailer(commands.Cog):
             return
         if jailed_role not in member.roles:
             return
-        await member.remove_roles(jailed_role)
-        await member.add_roles(member_role)
+        await member.edit(roles=[member_role])
         jail_channel = discord.utils.get(ctx.guild.channels, name="horny-jail")
         await jail_channel.send(
             f"{member}"
